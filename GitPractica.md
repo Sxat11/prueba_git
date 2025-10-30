@@ -310,6 +310,66 @@ index b9c60b3..5d9f7a2 100644
 
 ## 6. Ignorar archivos (.gitignore)
 Cuando empiezo a tener una cantidad de archivos importantes suele suceder que hay algunos que no me interesa gestionar a nivel de versiones.
+Veamos esto en funcionamiento: crearemos una archivo .gitignore y añádele lo anterior
+
+```bash
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ mkdir .gitignore
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ nano Hola.java
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ nano temporal~
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ nano importante~
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ ls -a
+./   .git/        Hola.java    script.sh  texto.txt
+../  .gitignore/  importante~  temporal~
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git status
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   texto.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        Hola.java
+        importante~
+        temporal~
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git add .
+warning: in the working copy of 'texto.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Hola.java', LF will be replaced by CRLF the next time Git touches it
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git commit -m "Añadimos fuentes en java y archivos importantes"
+[main bc7271e] Añadimos fuentes en java y archivos importantes
+ 4 files changed, 6 insertions(+)
+ create mode 100644 Hola.java
+ create mode 100644 importante~
+ create mode 100644 temporal~
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git ls-tree --name-only -r HEAD
+Hola.java
+importante~
+script.sh
+temporal~
+texto.txt
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$
+```
 
 
 Añadadiremos a nuestro directorio el archivo Hola.java
@@ -322,8 +382,6 @@ la previa.
 
 $ git tag v0.7 --> añade un tag y si queremos añadir la versión actual simplemente v.X.X. 
 
-$ git tag v0.3 b34f694ad7dd653ea8c05c2645a045e4a444c06e
-
 $ git log --oneline --> Es una forma resumida (en una línea) de escribir el log
 
 $ git checkout v0.3 --> para acceder a una versión antigua para revisar algo.
@@ -331,6 +389,42 @@ $ git checkout v0.3 --> para acceder a una versión antigua para revisar algo.
 $ git checkout main --> para acceder a la versión más reciente.
 
 Los tags se almacenan en el directorio .git/refs/tags
+
+```bash
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ commit
+.git/        Hola.java    script.sh    texto.txt
+.gitignore/  importante~  temporal~
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git tag v0.7
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git log --oneline
+bc7271e (HEAD -> main, tag: v0.7) Añadimos fuentes en java y archivos importante
+s
+51581ea Probando diff
+2e4f462 Ampliada la explicación del texto
+48c284d Añadiendo archivo texto.txt
+5df1c20 Confirmación inicial
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git show v0.3
+fatal: ambiguous argument 'v0.3': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ get checkout v0.3
+bash: get: command not found
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git checkout main
+Already on 'main'
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$
+```
 
 
 ## 8. Ramas
@@ -357,11 +451,152 @@ $ git merge --> junta la rama secundaria con la principal
 
 Esto en ocasiones informa de conflictos o posiblesproblemas.
 
+```bash
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git branch Prueba
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git log --oneline
+bc7271e (HEAD -> main, tag: v0.7, Prueba) Añadimos fuentes en java y archivos im
+portantes
+51581ea Probando diff
+2e4f462 Ampliada la explicación del texto
+48c284d Añadiendo archivo texto.txt
+5df1c20 Confirmación inicial
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git branch
+  Prueba
+* main
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git switch Prueba
+Switched to branch 'Prueba'
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (Prueba)
+$ git branch
+* Prueba
+  main
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (Prueba)
+$ git log --oneline
+bc7271e (HEAD -> Prueba, tag: v0.7, main) Añadimos fuentes en java y archivos im
+portantes
+51581ea Probando diff
+2e4f462 Ampliada la explicación del texto
+48c284d Añadiendo archivo texto.txt
+5df1c20 Confirmación inicial
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (Prueba)
+$ git commit -a -m "Rama para pruebas de código"
+On branch Prueba
+nothing to commit, working tree clean
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (Prueba)
+$ nano Hola.java
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (Prueba)
+$ git commit -a -m ""Llegan los ents a Java
+fatal: paths 'los ...' with -a does not make sense
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (Prueba)
+$ git commit -a -m ""Llegan los ents a Java"
+> git tag v0.7-Ent-Release
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (Prueba)
+$ git tag v0.7-Ent-Release
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (Prueba)
+$ git log
+commit bc7271e3534342902ce3e5d45855ef553e70d6c7 (HEAD -> Prueba, tag: v0.7-Ent-R
+elease, tag: v0.7, main)
+Author: Yusuf Dikeç <manusaxoalto@gmail.com>
+Date:   Thu Oct 30 11:54:34 2025 +0100
+
+    Añadimos fuentes en java y archivos importantes
+
+commit 51581eaf2e4dd6b1ac4518f6096f10c9e4123b5b
+Author: Yusuf Dikeç <manusaxoalto@gmail.com>
+Date:   Thu Oct 30 09:15:12 2025 +0100
+
+    Probando diff
+
+commit 2e4f462861b5f705dcfc57d13c8765b29999c7ed
+Author: Yusuf Dikeç <manusaxoalto@gmail.com>
+Date:   Thu Oct 30 00:42:15 2025 +0100
+
+    Ampliada la explicación del texto
+
+commit 48c284d755f9bca17d7e485a6de924bf069a0207
+Author: Yusuf Dikeç <manusaxoalto@gmail.com>
+Date:   Thu Oct 30 00:38:55 2025 +0100
+
+    Añadiendo archivo texto.txt
+
+commit 5df1c200645df2a4e6712e4808c04c6d7b8cc913
+Author: Yusuf Dikeç <manusaxoalto@gmail.com>
+Date:   Thu Oct 30 00:34:19 2025 +0100
+
+    Confirmación inicial
+    ```
+```bash
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (Prueba)
+$ git switch main
+M       Hola.java
+Switched to branch 'main'
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ cat Hola.java
+class Hola {
+        public static void main(String[] args){
+                System.out.println("Welcome to the Java World");
+        }
+}
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git merge Prueba
+Already up to date.
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$
+```
+
 
 ## 9. Eliminar y quitar de seguimiento
 
 $ git rm --> Elimina archivos
+
 $ git reset HEAD *.class
+```bash
+$ git rm importante~
+$ git reset HEAD *.class
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git reset HEAD *.class
+Unstaged changes after reset:
+M       Hola.java
+```
 
 ## 10. Repositorios remotos: GitHub
 
+```bash
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git clone https://github.com/Sxat11/prueba_git.git
+Cloning into 'prueba_git'...
+warning: You appear to have cloned an empty repository.
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git push -u origin master
+error: src refspec master does not match any
+error: failed to push some refs to 'origin'
+
+usuario@DESKTOP-JHGTBRI MINGW64 ~/prueba_git (main)
+$ git push
+fatal: No configured push destination.
+Either specify the URL from the command-line or configure a remote repository using
+
+    git remote add <name> <url>
+
+and then push using the remote name
+
+    git push <name>
+```
